@@ -1,0 +1,321 @@
+<ion-header>
+  <ion-toolbar class="ion-header-bg">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-buttons class="back_button" (click)="change_menu()" slot="end">
+      < Back
+    </ion-buttons>
+    <ion-title>Edit Product</ion-title>
+    
+  </ion-toolbar>
+</ion-header>
+
+ 
+  <ion-content class="main-content">
+    <div *ngIf="this.Cloading" class="overlay_custom_loader">
+      <ion-spinner name="bubbles" color="primary"></ion-spinner>
+    </div>
+    <ion-card class="custom_card">
+      <ion-card-header class="card_header_bg_cstm">
+        <!-- <ion-card-subtitle>Card Subtitle</ion-card-subtitle> -->
+        <ion-item>
+          <ion-card-title>Fill Details         
+            <ion-spinner color="primary" *ngIf="loader" name="lines"></ion-spinner>
+          </ion-card-title>
+          <span *ngIf="this.userType!='admin'">
+            <ion-badge slod="start" class="defaultBranchBtn"  color="light" *ngFor="let branch_ of branches">{{ branch_.branch_name }}</ion-badge>
+          </span>
+        </ion-item>
+
+
+      </ion-card-header>
+    
+      <ion-card-content >
+      <form [formGroup]="createForm" >
+        <ion-grid class="cstm_form">
+          <ion-row justify-content-center>
+            <ion-col size-sm="12" size-xs="12" size-md="3" size-lg="3">
+              <ion-item>
+                <ion-label position="stacked">Model</ion-label>
+                <ion-input formControlName="model_number" name="model_number" type="text"  ></ion-input>
+              </ion-item>
+              <ion-item lines="none" class="ion-no-padding" *ngIf="!createForm.controls.model_number.valid  && (createForm.controls.model_number.dirty || submitAttempt)">
+                <p class='has_error'>This Field is required.</p>
+              </ion-item>
+
+            </ion-col>                  
+
+            <ion-col size-sm="12" size-xs="12" size-md="3" size-lg="3">
+              <ion-item  [hidden]="this.userType!='admin'">
+                <ion-label position="stacked">Branch Name</ion-label>
+                <ion-select [compareWith]="compareWith" (ionCancel)="onCancel()" cancelText="Select/Unselect All" multiple="true" (ionChange)="change_branch($event)" [compareWith]="compareWith" interface="popover" formControlName="branch_id" name="branch_id"  placeholder="Select" class="cstm_select">
+                  
+                  <span *ngIf="userType=='admin'">
+                    <ion-select-option  *ngFor ="let item of branches;" value="{{ item.branch_id }}">{{ item.branch_name }}</ion-select-option>
+                  </span>
+                  <span *ngIf="userType=='branchadmin'">
+                    <ion-select-option  selected='true' value="{{this.selectedBranches }}">{{ this.defaultBranchName }}</ion-select-option>
+                  </span>
+
+                </ion-select>
+              </ion-item>
+              <ion-item lines="none" class="ion-no-padding" *ngIf="!createForm.controls.branch_id.valid  && (createForm.controls.branch_id.dirty || submitAttempt)">
+                <p class='has_error'>This Field is required.</p>
+              </ion-item>
+
+            </ion-col>
+            <ion-col size-sm="12" size-xs="12" size-md="3" size-lg="3">
+
+
+
+              <ion-item>
+                <ion-label position="stacked">Main Category</ion-label>
+                <ion-select value="{{selectedMainCategory}}" (ionChange)="change_main_category($event)"  interface="popover" formControlName="main_category_id" name="main_category_id"  placeholder="Select One" class="cstm_select">
+                    <ion-select-option  *ngFor ="let item of mainCategories;" value="{{ item.product_category_id }}">{{ item.category_name }}</ion-select-option>
+                </ion-select>
+              </ion-item>
+
+               <ion-item lines="none" class="ion-no-padding" *ngIf="!createForm.controls.main_category_id.valid  && (createForm.controls.main_category_id.dirty || submitAttempt)">
+                <p class='has_error'>This Field is required.</p>
+              </ion-item>
+</ion-col>
+            <ion-col size-sm="12" size-xs="12" size-md="3" size-lg="3">
+
+              <ion-item>
+                <ion-label position="stacked">Category</ion-label>
+                <ion-select value="{{ selectedCategory}}" interface="popover" formControlName="category_id" (ionChange)="change_category($event)" name="category_id"  placeholder="Select One" class="cstm_select">
+                    <ion-select-option  *ngFor ="let item of Categories;" value="{{ item.product_category_id }}">{{ item.category_name }}</ion-select-option>
+                </ion-select>
+              </ion-item>
+
+               <ion-item lines="none" class="ion-no-padding" *ngIf="!createForm.controls.category_id.valid  && (createForm.controls.category_id.dirty || submitAttempt)">
+                <p class='has_error'>This Field is required.</p>
+              </ion-item>
+              
+            </ion-col>
+
+            <ion-col size-sm="12" size-xs="12" size-md="3" size-lg="3">
+
+              <ion-item>
+                <ion-label position="stacked">Sub Category</ion-label>
+                <ion-select value="{{ selectedSubCategory }}"  interface="popover" formControlName="sub_category_id" name="sub_category_id"  placeholder="Select One" class="cstm_select">
+                    <ion-select-option  *ngFor ="let item of SubCategories;" value="{{ item.product_category_id }}">{{ item.category_name }}</ion-select-option>
+                </ion-select>
+              </ion-item>
+
+               <ion-item lines="none" class="ion-no-padding" *ngIf="!createForm.controls.sub_category_id.valid  && (createForm.controls.sub_category_id.dirty || submitAttempt)">
+                <p class='has_error'>This Field is required.</p>
+              </ion-item>
+              
+            </ion-col>
+
+            <ion-col size-sm="12" size-xs="12" size-md="3" size-lg="3">
+
+              <ion-item>
+                <ion-label position="stacked">Brands</ion-label>
+                <ion-select value="{{ selectedBrand }}"  interface="popover" formControlName="brand_id" name="brand_id"  placeholder="Select One" class="cstm_select">
+                    <ion-select-option  *ngFor ="let item of brands;" value="{{ item.brand_id }}">{{ item.brand_name }}</ion-select-option>
+                </ion-select>
+              </ion-item>
+
+               <ion-item lines="none" class="ion-no-padding" *ngIf="!createForm.controls.brand_id.valid  && (createForm.controls.brand_id.dirty || submitAttempt)">
+                <p class='has_error'>This Field is required.</p>
+              </ion-item>
+              
+            </ion-col>
+                           
+
+            <ion-col size-sm="12" size-xs="12" size-md="12" size-lg="12" *ngIf="productFields.length!=''" padding>
+
+            <h3 style="margin: 12px 0 0 0;">Product Details</h3>
+   
+            </ion-col>
+            <!-- <span *ngIf="productFields.length!=0"> -->
+              <!-- <span  *ngFor="let field_item of productFields;"> -->
+                <ion-col *ngFor="let field_item of productFields;"size-sm="12" size-xs="12" size-md="3" size-lg="3">
+                  <ion-item *ngIf="field_item.get_input">
+                    <ion-label position="stacked">{{field_item.get_input.title}} {{ (field_item.get_input.is_required==1 ? '*': '') }}</ion-label>
+                    <ion-checkbox size="small" mode="ios" style="margin-bottom: 15%;" placholder="Select" *ngIf="field_item.get_input.input_type=='checkbox'" formControlName="{{field_item.get_input.name}}" name="{{field_item.get_input.name}}" slot="end"  checked="{{ field_item.set_value ? true : false }}"></ion-checkbox>
+                    <!-- pattern="{{ (field_item.get_input.is_integer==1 ? '[0-9]*': '') }}" required="{{ (field_item.get_input.is_required==1 ? true: false) }}" -->
+                    <ion-input *ngIf="field_item.get_input.input_type=='text'" value="{{ field_item.set_value }}" formControlName="{{field_item.get_input.name}}" name="{{field_item.get_input.name}}"  type="text" ></ion-input>
+                    <!-- required="{{ (field_item.get_input.is_required==1 ? true: false) }}"  -->
+                    <ion-select value="{{ field_item.set_value }}" *ngIf="field_item.get_input.input_type=='dropdown'" interface="popover" formControlName="{{field_item.get_input.name}}" name="{{field_item.get_input.name}}" placeholder="Select One" class="cstm_select">
+                      <ion-select-option  value="">Select</ion-select-option>
+                      <ion-select-option  *ngFor ="let d_options of field_item.get_input.options;" value="{{ d_options.tbl_value }}">{{ d_options.tbl_value }}</ion-select-option>
+                  </ion-select>
+    
+                </ion-item>
+                  
+                  <ion-item lines="none" class="ion-no-padding" *ngIf="field_item.get_input.is_required==1 && createForm.get(field_item.get_input.name).hasError('required')  && (createForm.controls[field_item.get_input.name].dirty || submitAttempt)">
+                   <p class='has_error'>This Field is required.</p>
+                 </ion-item>
+                 <ion-item class="ion-no-padding" lines="none" *ngIf="field_item.get_input.is_integer==1 && createForm.get(field_item.get_input.name).hasError('pattern') && (createForm.controls[field_item.get_input.name].dirty || submitAttempt)">
+                  <p class='has_error'>Only Digits Allowed.</p>
+                </ion-item>
+
+                </ion-col>
+  
+                <ion-col size-sm="12" size-xs="12" size-md="12" size-lg="12" *ngIf="productFields.length!=''" padding>
+                  <h3 style="margin: 12px 0 0 0;">Cost & Waranty</h3>
+         
+                  </ion-col>
+                  
+                  <ion-col size-sm="12" size-xs="12" size-md="3" size-lg="3">
+                    <ion-item>
+                      <ion-label position="stacked">COST</ion-label>
+                      <ion-input formControlName="cost" name="cost" type="text"  ></ion-input>
+                    </ion-item>
+                    <ion-item lines="none" class="ion-no-padding" *ngIf="!createForm.controls.cost.valid  && (createForm.controls.cost.dirty || submitAttempt)">
+                      <p class='has_error'>This Field is required.</p>
+                    </ion-item>
+                    <ion-item lines="none" class="ion-no-padding" *ngIf="this.costvalError">
+                      <p class='has_error'>This Field is required.</p>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size-sm="12" size-xs="12" size-md="3" size-lg="3">
+
+                    <ion-radio-group (ionChange)="change_refurb_type($event)" #radioGroup  formControlName="refurb_cost_type" name="refurb_cost_type" >
+                    <ion-row>
+                      <ion-col>
+                        <ion-item lines="none">
+                          <ion-label>Flat</ion-label>
+                          <ion-radio name="refurb_cost_type" value="flat"></ion-radio>
+                        </ion-item>
+                      </ion-col>
+                      <ion-col>
+                        <ion-item lines="none">
+                         <ion-label>Perc % </ion-label>
+                          <ion-radio name="refurb_cost_type"  value="percentage"></ion-radio>
+                        </ion-item>
+                      </ion-col>
+                    </ion-row>  
+                  </ion-radio-group>
+                </ion-col>       
+                <ion-col size-sm="12" size-xs="12" size-md="3" size-lg="3">
+                  <ion-item>
+                    <ion-label position="stacked">Refurb. Cost</ion-label>
+                    <ion-input (ionChange)="change_refurb_cost($event)"  readonly="{{refurbReadonly}}" formControlName="refurb_cost" name="refurb_cost" type="text"  ></ion-input>
+                  </ion-item>
+                  <ion-item lines="none" class="ion-no-padding" *ngIf="!createForm.controls.refurb_cost.valid  && (createForm.controls.refurb_cost.dirty || submitAttempt)">
+                    <p class='has_error'>This Field is required.</p>
+                  </ion-item>
+
+                </ion-col>
+                  <ion-col size-sm="12" size-xs="12" size-md="3" size-lg="3">
+                    <ion-item>
+                      <ion-label position="stacked">TOTAL COST</ion-label>
+                      <ion-input value="0" formControlName="total_cost" name="total_cost" type="text"  ></ion-input>
+                    </ion-item>
+                    <ion-item lines="none" class="ion-no-padding" *ngIf="!createForm.controls.total_cost.valid  && (createForm.controls.total_cost.dirty || submitAttempt)">
+                      <p class='has_error'>This Field is required.</p>
+                    </ion-item>
+      
+                  </ion-col>
+                  
+                   
+                  
+      
+
+                  <!-- <ion-col size-sm="12" size-xs="12" size-md="3" size-lg="3">
+                    <ion-item>
+                      <ion-label position="stacked">Suggested Buy</ion-label>
+                      <ion-input formControlName="suggested_buy_1" name="suggested_buy_1" type="text"  ></ion-input>
+                    </ion-item>
+                    <ion-item lines="none" class="ion-no-padding" *ngIf="!createForm.controls.suggested_buy_1.valid  && (createForm.controls.suggested_buy_1.dirty || submitAttempt)">
+                      <p class='has_error'>This Field is required.</p>
+                    </ion-item>
+      
+                  </ion-col> -->
+
+                  <ion-col size-sm="12" size-xs="12" size-md="3" size-lg="3">
+                    <ion-item>
+                    <ion-label position="stacked">Suggested Buy</ion-label>
+                    <ng-select2 
+                    formControlName="suggested_buy_1"
+                    name="suggested_buy_1" 
+                    [data]="this.relatedProducts"
+                    [width]="300"
+                    [options]="options"
+                    ></ng-select2>
+                    <!-- <ion-select [compareWith]="compareWith"  [(ngModel)]="selectedRealtedProducts"  (ionCancel)="onCancelsuggestedbuy()" cancelText="Select/Unselect All" multiple="true"   [compareWith]="compareWith" interface="popover" formControlName="suggested_buy_1" name="suggested_buy_1"  placeholder="Select" class="cstm_select">
+                      <span *ngIf="userType=='admin'">
+                        <ion-select-option  *ngFor ="let item of relatedProducts;" value="{{ item.product_id }}">{{ item.model_number }}</ion-select-option>
+                      </span>
+                     </ion-select> -->
+                  </ion-item>
+                  <ion-item lines="none" class="ion-no-padding" *ngIf="!createForm.controls.suggested_buy_1.valid  && (createForm.controls.suggested_buy_1.dirty || submitAttempt)">
+                    <p class='has_error'>This Field is required.</p>
+                  </ion-item>
+                </ion-col> 
+
+                <ion-col size-sm="12" size-xs="12" size-md="3" size-lg="3">
+                  <ion-item>
+                    <ion-label position="stacked">Warranty with Product</ion-label>
+                    <ion-input formControlName="warranty_with_product" name="warranty_with_product" type="text"  ></ion-input>
+                  </ion-item>
+                  <ion-item lines="none" class="ion-no-padding" *ngIf="!createForm.controls.warranty_with_product.valid  && (createForm.controls.warranty_with_product.dirty || submitAttempt)">
+                    <p class='has_error'>This Field is required.</p>
+                  </ion-item>
+    
+                </ion-col>
+                <ion-col size-sm="12" size-xs="12" size-md="3" size-lg="3">
+                  <ion-item>
+                  <ion-label position="stacked">Extra Warranty</ion-label>
+                  <ion-select [(ngModel)]="selectedExtraWarranty" [compareWith]="compareWith"   multiple="true"   [compareWith]="compareWith" interface="popover" formControlName="warranty_ids" name="warranty_ids"  placeholder="Select" class="cstm_select">
+                       <ion-select-option  *ngFor ="let item of extraWarranties;" value="{{ item.id }}">{{ item.title }}-{{ item.price }}</ion-select-option>
+                  </ion-select>
+                </ion-item>
+                <ion-item lines="none" class="ion-no-padding" *ngIf="!createForm.controls.warranty_ids.valid  && (createForm.controls.warranty_ids.dirty || submitAttempt)">
+                  <p class='has_error'>This Field is required.</p>
+                </ion-item>
+              </ion-col> 
+                     
+
+                  <ion-col size-sm="12" size-xs="12" size-md="3" size-lg="3">
+                    <ion-item>
+                      <ion-label position="stacked">FEATURES</ion-label>
+                      <ion-input formControlName="features" name="features" type="text"  ></ion-input>
+                    </ion-item>
+                    <ion-item lines="none" class="ion-no-padding" *ngIf="!createForm.controls.features.valid  && (createForm.controls.features.dirty || submitAttempt)">
+                      <p class='has_error'>This Field is required.</p>
+                    </ion-item>
+      
+                  </ion-col>
+
+ 
+
+                  <ion-col style="display: none;" size-sm="12" size-xs="12" size-md="3" size-lg="3" *ngFor="let item of warranty; index as i">
+                    <ion-item>
+                      <ion-label position="stacked">Warranty {{ i+1 }}</ion-label>
+                      <ion-input formControlName="warranty_{{ i+1 }}" name="warranty_{{ i+1 }}" type="text"  ></ion-input>
+                    </ion-item>
+                    <ion-item lines="none" class="ion-no-padding" *ngIf="createForm.get('warranty_'+(i+1)).hasError('required')  && (createForm.controls['warranty_'+(i+1)].dirty || submitAttempt)">
+                      <p class='has_error'>This Field is required.</p>
+                    </ion-item>
+       
+                  </ion-col>
+                  <ion-icon (click)="removeWarranty()"  style="display: none;font-size: 22px; cursor: pointer;" name="close-circle"></ion-icon>
+                  <ion-icon (click)="addWarrany()"   style="display: none;font-size: 22px; cursor: pointer;" name="add-circle"></ion-icon>
+
+
+
+
+              <!-- </span> -->
+            <!-- </span> -->
+ 
+
+             
+                
+                
+               <div class="save_button">
+                <ion-button [disabled]="!createForm.valid"  class="ion-float-right" (click)="save()" type="submit">Save</ion-button>
+              </div>
+             
+          </ion-row>
+          
+        </ion-grid>
+      </form>
+      </ion-card-content>
+    </ion-card>
+</ion-content>

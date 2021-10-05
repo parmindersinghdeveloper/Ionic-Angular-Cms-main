@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar class="ion-header-bg">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-buttons class="back_button" (click)="change_menu()" slot="end">
+      < Back
+    </ion-buttons>
+    <ion-title>Create Main Category</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="main-content">
+  <div *ngIf="this.Cloading" class="overlay_custom_loader">
+    <ion-spinner name="bubbles" color="primary"></ion-spinner>
+  </div>
+  <ion-card class="custom_card">
+    <ion-card-header class="card_header_bg_cstm">
+      <!-- <ion-card-subtitle>Card Subtitle</ion-card-subtitle> -->
+      <ion-item>
+        <ion-card-title>Fill Details</ion-card-title>
+        <span *ngIf="this.userType!='admin'">
+          <ion-badge slod="start" class="defaultBranchBtn"  color="light" *ngFor="let branch_ of branches">{{ branch_.branch_name }}</ion-badge>
+        </span>
+      </ion-item>
+    </ion-card-header>
+  
+    <ion-card-content >
+ 
+      <form [formGroup]="createForm">
+        <ion-grid class="cstm_form">
+          <ion-row justify-content-center>
+            <ion-col size-sm="12" size-xs="12" size-md="12" size-lg="12">
+              <ion-item [hidden]="this.userType!='admin'">
+                <ion-label position="stacked">Branch Name</ion-label>
+                <ion-select (ionCancel)="onCancel()" cancelText="Select/Unselect All" multiple="true" [(ngModel)]="selectedBranches"   [compareWith]="compareWith" interface="popover" formControlName="branch_id" name="branch_id"  placeholder="Select" class="cstm_select">
+                    <ion-select-option  *ngFor ="let item of branches;" value="{{ item.branch_id }}">{{ item.branch_name }}</ion-select-option>
+                </ion-select>
+              </ion-item>
+
+               <ion-item lines="none" class="ion-no-padding" *ngIf="!createForm.controls.branch_id.valid  && (createForm.controls.branch_id.dirty || submitAttempt)">
+                <p class='has_error'>This Field is required.</p>
+              </ion-item>
+
+                <ion-item>
+                  <ion-label position="stacked">Main Category Name</ion-label>
+                  <ion-input  formControlName="category_name" name="category_name" type="text"  ></ion-input>
+                </ion-item>
+                <ion-item class="ion-no-padding" lines="none" *ngIf="!createForm.controls.category_name.valid  && (createForm.controls.category_name.dirty || submitAttempt)">
+                  <p class='has_error'>This Field is required.</p>
+                </ion-item>
+              <div class="save_button">
+                <ion-button [disabled]="!createForm.valid"  class="ion-float-right" (click)="save()" type="submit">Save</ion-button>
+              </div>
+              
+            </ion-col>
+
+          </ion-row>
+          
+        </ion-grid>
+      </form>
+      </ion-card-content>
+      </ion-card>
+</ion-content>

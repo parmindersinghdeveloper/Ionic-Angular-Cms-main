@@ -1,0 +1,221 @@
+<ion-app>
+  <ion-split-pane contentId="main-content">
+    <ion-menu contentId="main-content" type="overlay" class='sidemneu_'>
+      <ion-content>
+
+        <ion-list id="inbox-list" class="main_header"  style="padding-top:0px;">
+         
+          <ion-list-header style="text-align: center !important;margin: 1px 22%;">  <ion-img [src]="'../assets/images/logo-icon.png'"></ion-img>CRM</ion-list-header>
+          <ion-note style="margin-top: 10px;    margin-top: 10px; padding-left: 18%;">{{userEmail}}</ion-note>
+          <ion-item-divider>
+          </ion-item-divider>
+          <!-- {{userType}} -->
+          <ion-menu-toggle auto-hide="false" *ngIf="this.userType=='admin'">
+            <ion-item *ngIf="this.userType=='admin' || BranchRights.view" (click)="openPage = 'dashboard'; openSubPage = ''" [class.selected]="openPage == 'dashboard'" routerDirection="root" [routerLink]="'/dashboard'" lines="none" detail="false" >
+              <ion-icon class="header_menu_label_icon" slot="start" [ios]="'menu-outline'" [md]="'menu-sharp'"></ion-icon>
+              <ion-label class="header_menu_label">Dashboard</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+
+          <ion-menu-toggle auto-hide="false" *ngIf="this.userType!='admin'">
+            <ion-item  (click)="openPage = 'dashboard'; openSubPage = ''" [class.selected]="openPage == 'dashboard'" routerDirection="root" [routerLink]="'/user-dashboard'" lines="none" detail="false" >
+              <ion-icon class="header_menu_label_icon" slot="start" [ios]="'menu-outline'" [md]="'menu-sharp'"></ion-icon>
+              <ion-label class="header_menu_label">Dashboard</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+           <ion-item *ngIf="this.userType=='admin' || PaymentMethodRights.view || DiscrepancyReasonsRights.view || TagMasterRights.view || MastersRight.view || BranchRights.view || DepartmentRights.view || UsersRights.view || SalespersonCommissionRights.view || ProductsRights.view || WarrantyRights.view || CategoriesRights.view || BrandsRights.view || InputTypesRight.view || DropdownsRights.view || WarrantyRights.view"  class="hover_css" auto-hide="false" (click)="openPage = (openPage === 'main_master' ? '' : 'main_master');openSubPage = ''" [class.selected]="openPage == 'main_master'"  lines="none" detail="false" >
+              <ion-icon class="header_menu_label_icon" slot="start" [ios]="'home-outline'" [md]="'home-sharp'"></ion-icon>
+              <ion-label class="header_menu_label">Masters</ion-label>
+            </ion-item>
+
+            <ion-menu-toggle auto-hide="false" [hidden]="openPage!='main_master'">
+              <ion-list class="ion-no-padding" lines="none">
+                <ion-item *ngIf="this.userType=='admin' || BranchRights.view" (click)="openPage = 'main_master';  openSubPage='branch_list';" [class.selected]="openPage == 'main_master' &&  openSubPage == 'branch_list'" [routerLink]="['/branch-list']"
+                        class="ion-no-padding sub-menu submenu_item">
+                        <ion-label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Branches</ion-label>
+                </ion-item>
+                <ion-item *ngIf="this.userType=='admin' || DepartmentRights.view" (click)="openPage = 'main_master'; openSubPage='department_list';" [class.selected]="openPage == 'main_master' &&  openSubPage == 'department_list'" [routerLink]="['/department-list']"
+                    class="ion-no-padding sub-menu submenu_item">
+                    <ion-label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Departments</ion-label>
+                </ion-item>
+
+              <ion-item *ngIf="this.userType=='admin' || UsersRights.view" (click)="openPage = 'main_master'; openSubPage='users_list';" [class.selected]="openPage == 'main_master' &&  openSubPage == 'users_list'" [routerLink]="['/users-list']"
+              class="sub-menu submenu_item">
+                <ion-label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Users</ion-label>
+              </ion-item>
+
+              <ion-item *ngIf="this.userType=='admin' || UsersRights.view" (click)="openPage = 'main_master'; openSubPage='users_rights';" [class.selected]="openPage == 'main_master' &&  openSubPage == 'users_rights'" [routerLink]="['/user-rights']"
+              class="sub-menu submenu_item">
+                <ion-label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; User Rights</ion-label>
+              </ion-item>
+
+              <ion-item *ngIf="this.userType=='admin' || SalespersonCommissionRights.view" (click)="openPage = 'main_master'; openSubPage='sales_person_commission';" [class.selected]="openPage == 'main_master' &&  openSubPage == 'sales_person_commission'" [routerLink]="['/sales-person-commission']"
+              class="sub-menu submenu_item">
+                <ion-label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SalesPerson Commission</ion-label>
+              </ion-item>
+
+              <ion-item *ngIf="this.userType=='admin' || InputTypesRight.view" (click)="openPage = 'main_master'; openSubPage='product_fields_create';" [class.selected]="openPage == 'main_master' &&  openSubPage == 'product_fields_list'" [routerLink]="['/product-fields-list']"
+              class="sub-menu submenu_item">
+              <ion-label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Input Types</ion-label>
+              </ion-item>
+              <ion-item *ngIf="this.userType=='admin' || DropdownsRights.view" (click)="openPage = 'main_master'; openSubPage='masters_dashboard';" [class.selected]="openPage == 'main_master' &&  openSubPage == 'masters_dashboard'" [routerLink]="['/masters-dashboard']"
+              class="sub-menu submenu_item">
+              <ion-label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Dropdowns</ion-label>
+          </ion-item>
+          <ion-item *ngIf="this.userType=='admin' || WarrantyRights.view" (click)="openPage = 'main_master'; openSubPage='warranty_list';" [class.selected]="openPage == 'main_master' &&  openSubPage == 'warranty_list'" [routerLink]="['/warranty-list']"
+                    class="sub-menu submenu_item">
+              <ion-label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Warranty</ion-label>
+          </ion-item>
+          <ion-item *ngIf="this.userType=='admin' || CategoriesRights.view" (click)="openPage = 'main_master'; openSubPage='category_list';" [class.selected]="openPage == 'main_master' &&  openSubPage == 'category_list'" [routerLink]="['/product-category']"
+                        class="sub-menu submenu_item">
+            <ion-label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Categories</ion-label>
+        </ion-item>
+        <ion-item *ngIf="this.userType=='admin' || BrandsRights.view" (click)="openPage = 'main_master'; openSubPage='brand_create';" [class.selected]="openPage == 'main_master' &&  openSubPage == 'brand_create'" [routerLink]="['/brand-list']"
+              class="sub-menu submenu_item">
+              <ion-label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Brands</ion-label>
+          </ion-item>
+
+          <ion-item *ngIf="this.userType=='admin' || DiscrepancyReasonsRights.view" (click)="openPage = 'main_master'; openSubPage='d_reason_list';" [class.selected]="openPage == 'main_master' &&  openSubPage == 'd_reason_list'" [routerLink]="['/discrepany-reason']"
+          class="sub-menu submenu_item">
+          <ion-label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Discrepancy Reasons</ion-label>
+        </ion-item>
+          <ion-item *ngIf="this.userType=='admin' || TagMasterRights.view" (click)="openPage = 'main_master'; openSubPage='price_tag_create';" [class.selected]="openPage == 'main_master' &&  openSubPage == 'price_tag_create'" [routerLink]="['/price-tag-create']"
+            class="sub-menu submenu_item">
+            <ion-label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Price tags</ion-label>
+          </ion-item>
+
+          <ion-item *ngIf="this.userType=='admin' || PaymentMethodRights.view" (click)="openPage = 'sales_master'; openSubPage='payment_method';" [class.selected]="openPage == 'sales_master' &&  openSubPage == 'payment_method'" [routerLink]="['/payment-method-list']"
+          class="sub-menu submenu_item">
+          <ion-label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Payment Methods</ion-label>
+          </ion-item>
+
+                </ion-list>
+              </ion-menu-toggle>
+
+              <ion-item *ngIf="this.userType=='admin' || ProductsRights.view" auto-hide="false" (click)="openPage = (openPage === 'product_category' ? '' : 'product_category');openSubPage = ''" [class.selected]="openPage == 'product_category'" lines="none" detail="false"  [routerLink]="['/product-list']">
+                <ion-icon class="header_menu_label_icon" slot="start" name="copy"></ion-icon>
+                <ion-label class="header_menu_label">Products</ion-label>
+              </ion-item>
+               
+
+  
+                <!-- <ion-item  auto-hide="false" (click)="openPage = (openPage === 'sales_person_master' ? '' : 'sales_person_master');openSubPage = ''" [class.selected]="openPage == 'sales_person_master'" lines="none" detail="false" >
+                  <ion-icon class="header_menu_label_icon" slot="start" name="person-add"></ion-icon>
+                  <ion-label class="header_menu_label">Sales Person Master</ion-label>
+                  
+                </ion-item>
+                <ion-menu-toggle auto-hide="false" [hidden]="openPage!='sales_person_master'">
+                    <ion-list lines="none">
+                      <ion-item (click)="openPage = 'sales_person_master'; openSubPage='sales_person_create';" [class.selected]="openPage == 'sales_person_master' &&  openSubPage == 'sales_person_create'" [routerLink]="['/sales-person-create']"
+                          class="sub-menu submenu_item">
+                          <ion-label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Create Sales Person</ion-label>
+                      </ion-item>
+                      <ion-item (click)="openPage = 'sales_person_master'; openSubPage='sales_person_list';" [class.selected]="openPage == 'sales_person_master' &&  openSubPage == 'sales_person_list'" [routerLink]="['/sales-person-list']"
+                          class="sub-menu submenu_item">
+                          <ion-label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Sales Person List</ion-label>
+                      </ion-item>
+                      <ion-item (click)="openPage = 'sales_person_master'; openSubPage='sales_person_commission';" [class.selected]="openPage == 'sales_person_master' &&  openSubPage == 'sales_person_commission'" [routerLink]="['/sales-person-commission']"
+                      class="sub-menu submenu_item">
+                      <ion-label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Assign Commission</ion-label>
+                  </ion-item>
+                    </ion-list>
+                  </ion-menu-toggle> -->
+
+
+                  <ion-item *ngIf="this.userType=='admin' || ReceivalRights.view "  auto-hide="false" (click)="openPage = (openPage === 'receival_master' ? '' : 'receival_master');openSubPage = ''" [class.selected]="openPage == 'receival_master'" lines="none" detail="false" [routerLink]="['/receival-list']">
+
+                    <ion-icon class="header_menu_label_icon" slot="start" name="analytics-outline"></ion-icon>
+                    <ion-label class="header_menu_label">Receiving</ion-label>
+                    
+                  </ion-item>
+                  <!-- <ion-menu-toggle auto-hide="false" [hidden]="openPage!='receival_master'">
+                      <ion-list lines="none"> -->
+                        <!-- <ion-item *ngIf="this.userType=='admin' || GradesRights.view" (click)="openPage = 'receival_master'; openSubPage='grade_list';" [class.selected]="openPage == 'receival_master' &&  openSubPage == 'grade_list'" [routerLink]="['/grade-list']"
+                            class="sub-menu submenu_item">
+                            <ion-label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Grades</ion-label>
+                        </ion-item> -->
+                       
+                      <!-- <ion-item (click)="openPage = 'receival_master'; openSubPage='unit_id_list';" [class.selected]="openPage == 'receival_master' &&  openSubPage == 'unit_id_list'" [routerLink]="['/unit-id-list']"
+                        class="sub-menu submenu_item">
+                        <ion-label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Unit Id</ion-label>
+                      </ion-item>
+                      <ion-item (click)="openPage = 'receival_master'; openSubPage='model_list';" [class.selected]="openPage == 'receival_master' &&  openSubPage == 'model_list'" [routerLink]="['/model-list']"
+                        class="sub-menu submenu_item">
+                        <ion-label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Models</ion-label>
+                      </ion-item> -->
+
+                       <!-- <ion-item (click)="openPage = 'receival_master'; openSubPage='opening_stock_list';" [class.selected]="openPage == 'receival_master' &&  openSubPage == 'opening_stock_list'" [routerLink]="['/op-stock-list']"
+                        class="sub-menu submenu_item">
+                        <ion-label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; OP Stock</ion-label>
+                      </ion-item> -->
+                       
+                      <!-- <ion-item *ngIf="this.userType=='admin' || ReceivalRights.view" (click)="openPage = 'receival_master'; openSubPage='receival_list';" [class.selected]="openPage == 'receival_master' &&  openSubPage == 'receival_list'" 
+                      class="sub-menu submenu_item">
+                      <ion-label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Receiving List</ion-label>
+                    </ion-item> -->
+                   
+                      <!-- </ion-list>
+                     </ion-menu-toggle> -->
+
+
+                     <ion-item *ngIf="this.userType=='admin' || SalesRights.view"  auto-hide="false" (click)="openPage = (openPage === 'sales_master' ? '' : 'sales_master');openSubPage = ''" [class.selected]="openPage == 'sales_master'" lines="none" detail="false" [routerLink]="['/sales-list']">
+
+                      <ion-icon class="header_menu_label_icon" slot="start" name="analytics-outline"></ion-icon>
+                      <ion-label class="header_menu_label">Sales</ion-label>
+                      
+                    </ion-item>
+                    <ion-item *ngIf="this.userType=='admin' || DeliveryRights.view"  auto-hide="false" (click)="openPage = (openPage === 'delivery_master' ? '' : 'delivery_master');openSubPage = ''" [class.selected]="openPage == 'delivery_master'" lines="none" detail="false" [routerLink]="['/delivery-list']">
+
+                      <ion-icon class="header_menu_label_icon" slot="start" name="analytics-outline"></ion-icon>
+                      <ion-label class="header_menu_label">Delivery</ion-label>
+                      
+                    </ion-item>
+                    <!-- <ion-menu-toggle auto-hide="false" [hidden]="openPage!='sales_master'">
+                        <ion-list lines="none">
+
+                          <ion-item *ngIf="this.userType=='admin' || SalesRights.view" (click)="openPage = 'sales_master'; openSubPage='sales_list';" [class.selected]="openPage == 'sales_master' &&  openSubPage == 'sales_list'" 
+                          class="sub-menu submenu_item">
+                          <ion-label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Sales</ion-label>
+                        </ion-item>
+                      
+                        </ion-list>
+                       </ion-menu-toggle> -->
+                       
+                       <ion-item *ngIf="this.userType=='admin' || SalesRights.view"  auto-hide="false" (click)="openPage = (openPage === 'customer_master' ? '' : 'customer_master');openSubPage = ''" [class.selected]="openPage == 'customer_master'" lines="none" detail="false" >
+
+                        <ion-icon class="header_menu_label_icon" slot="start" name="analytics-outline"></ion-icon>
+                        <ion-label class="header_menu_label">Customers</ion-label>
+                        
+                      </ion-item>
+                       <ion-menu-toggle auto-hide="false" [hidden]="openPage!='customer_master'">
+                        <ion-list lines="none">
+                          <ion-item *ngIf="this.userType=='admin' || SalesRights.view" (click)="openPage = 'customer_master'; openSubPage='customer_create';" [class.selected]="openPage == 'customer_master' &&  openSubPage == 'customer_create'" [routerLink]="['/customer-create2']"
+                              class="sub-menu submenu_item">
+                              <ion-label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Create Customer</ion-label>
+                          </ion-item>
+                          <ion-item *ngIf="this.userType=='admin' || SalesRights.view" (click)="openPage = 'customer_master'; openSubPage='customer_list';" [class.selected]="openPage == 'customer_master' &&  openSubPage == 'customer_list'" [routerLink]="['/customer-list']"
+                          class="sub-menu submenu_item">
+                          <ion-label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Customer List</ion-label>
+                        </ion-item>
+                      
+                        </ion-list>
+                       </ion-menu-toggle>
+
+                  <ion-menu-toggle auto-hide="false">
+                  <ion-item (click)="logout()" [class.selected]="openPage == 'logout'"  lines="none" detail="false" >
+                    <ion-icon class="header_menu_label_icon"  slot="start" name="log-out"></ion-icon>
+                    <ion-label class="header_menu_label"> Logout</ion-label>
+                  </ion-item>
+                </ion-menu-toggle>
+          
+        </ion-list>
+    
+        
+        
+
+        
+      </ion-content>
+    </ion-menu>
+    <ion-router-outlet id="main-content"></ion-router-outlet>
+  </ion-split-pane>
+</ion-app>

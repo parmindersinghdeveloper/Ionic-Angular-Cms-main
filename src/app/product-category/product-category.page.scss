@@ -1,0 +1,54 @@
+ table 			      { 
+    border-spacing: 1;  
+    background:white;
+    border-radius:6px;
+    overflow:hidden;
+    width:100%;
+    margin:0 auto;
+    position:relative;
+    border-collapse: inherit;
+    border: 1px solid #dedede !important;
+    
+    td,th           { 
+      padding-left:8px
+    }
+    td{
+      cursor:pointer;
+    }
+    thead tr        { 
+      height: 42px;
+      background-color: #3caeef;
+      color: #ffffff;
+      font-size: 15px;
+    }
+    
+    tbody tr        { 
+      height:48px; 
+      border-bottom:1px solid #E3F1D5 ;
+      font-size: 14px;
+      &:last-child  { 
+        border:0; 
+      }
+    }
+    
+    td,th 					{ text-align:left;
+      &.l 					{ text-align:right }
+      &.c 					{ text-align:center }
+      &.r 					{ text-align:center }
+    }
+  }
+table td {
+    border-bottom: 1px solid gainsboro;
+}
+table.sub_table {
+    border-bottom: none !important;
+}
+.sub_c_row{
+    border:none;
+}
+@media only screen and (max-width:765px)
+{
+  ion-card-header  ion-item ion-button{
+    width : 100% !important;
+  }
+}

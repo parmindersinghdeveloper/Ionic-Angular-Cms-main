@@ -1,0 +1,197 @@
+<ion-header>
+  <ion-toolbar class="ion-header-bg">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Products</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content class="main-content">
+  <div *ngIf="this.Cloading" class="overlay_custom_loader">
+    <ion-spinner name="bubbles" color="primary"></ion-spinner>
+  </div>
+  <ion-card class="custom_card">
+    <ion-card-header>
+      <!-- <ion-card-subtitle>Card Subtitle</ion-card-subtitle> -->
+      <ion-item class="card_header_bg_cstm">
+
+        <ion-card-title>Product List</ion-card-title>
+        <ion-button *ngIf="UsersRights.add_new || this.userType=='admin'" [routerLink]="['/product-create']"  slot="end" color="primary">Create</ion-button>
+      </ion-item>
+    </ion-card-header>
+  <ion-card-content >
+    <ion-grid class="cust_report">
+
+    <ion-row>
+      <ion-col size-sm="12" size-xs="12" size-md="3" size-lg="3">
+        <ion-item class="ion_item_bg_white">
+          <ion-label position="stacked">Branch Name</ion-label>
+          <ion-select  [(ngModel)]="selectedBranches" (ionChange)='change_branch()' [compareWith]="compareWith" (ionCancel)="onCancel()" cancelText="Select/Unselect All" multiple="true"    #mySelect  interface="popover"  placeholder="Select" class="cstm_select">
+            <span *ngIf="branches">
+             
+            <span *ngIf="branches.length!=0">
+                <ion-select-option *ngFor ="let item of branches;" value="{{ item.branch_id }}">{{ item.branch_name }}</ion-select-option>
+              </span>
+            </span>
+            
+          </ion-select>
+        </ion-item>
+      </ion-col>
+      <ion-col size-sm="12" size-xs="12" size-md="3" size-lg="3">
+        <ion-item class="ion_item_bg_white">
+          <ion-label position="stacked">Main Catgory</ion-label>
+          <ion-select  [(ngModel)]="selectedMainCategory" (ionChange)='change_main_category($event)'     #mySelect  interface="popover"  placeholder="Select One" class="cstm_select">
+              <span *ngIf="mainCategories.length!=0">
+                <ion-select-option *ngFor ="let item of mainCategories;" value="{{ item.product_category_id }}">{{ item.category_name }}</ion-select-option>
+              </span>
+            
+          </ion-select>
+        </ion-item>
+      </ion-col>
+      <ion-col size-sm="12" size-xs="12" size-md="3" size-lg="3">
+        <ion-item class="ion_item_bg_white">
+          <ion-label position="stacked">Category</ion-label>
+          <ion-select  [(ngModel)]="selectedCategory" (ionChange)='change_category($event)'     #mySelect  interface="popover"  placeholder="Select One" class="cstm_select">
+              <span *ngIf="Categories.length!=0">
+                <ion-select-option *ngFor ="let item of Categories;" value="{{ item.product_category_id }}">{{ item.category_name }}</ion-select-option>
+              </span>
+            
+          </ion-select>
+        </ion-item>
+      </ion-col>
+      <ion-col size-sm="12" size-xs="12" size-md="3" size-lg="3">
+        <ion-item class="ion_item_bg_white">
+          <ion-label position="stacked">Sub Category</ion-label>
+          <ion-select  [(ngModel)]="selectedSubCategory" (ionChange)='change_sub_category($event)'     #mySelect  interface="popover"  placeholder="Select One" class="cstm_select">
+              <span *ngIf="subCategories.length!=0">
+                <ion-select-option *ngFor ="let item of subCategories;" value="{{ item.product_category_id }}">{{ item.category_name }}</ion-select-option>
+              </span>
+            
+          </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size-sm="12" offset-lg="8" offset-md="8"  size-xs="12"  size-md="4" size-lg="4">
+        <ion-searchbar
+      showcancelbutton=""
+      [(ngModel)]="searchTerm"
+      (ionChange)="setFilteredItems()"
+      placeholder="Search Model# or Brand"
+     ></ion-searchbar>
+    </ion-col>
+    <ion-col>
+      <ion-spinner name="circles" *ngIf="searchTermLoading"></ion-spinner>
+    </ion-col>
+  </ion-row>
+  <p *ngIf="list.length==0">No Data Found</p>
+  <div *ngIf="list.length!=0" class="main_tbl_div_table">
+
+  <ion-row>
+    <ion-col>
+      <table>
+        <thead>
+        <tr>
+          <th [hidden]="this.userType!='admin'">Sr.No.</th>
+          <th [hidden]="this.userType!='admin'">Branch Name</th>
+          <th>Model Number</th>
+          <th>Main Category</th>
+          <th>Category</th>
+          <th>Sub Category</th>
+          <th>Brand Name</th>
+          <th>MSRP</th>
+          <th>Cost</th>
+          <th>Refurb Cost</th>
+          <th>Total Cost</th>
+          <th>All Detail</th>
+
+
+          
+        </tr>
+        </thead>
+        <tbody>
+             <tr *ngFor ="let item of list; index as i" >
+
+              <!-- <td  (click)="presentActionSheet(item, i)"  >
+                <ul *ngIf="item.branches.length!=0">
+                  <li *ngFor ="let b_item of item.branches; index as bi">
+                    {{ b_item.branch_name }}
+                  </li>
+                </ul>
+              </td> -->
+              <td [hidden]="this.userType!='admin'" (click)="presentActionSheet(item, i)">{{ i + 1 }}</td>
+              <td [hidden]="this.userType!='admin'"  (click)="presentActionSheet(item, i)"  >
+                <span *ngIf="item.branches">
+                
+                    <span *ngIf="item.branches.length!=0">
+                      <div class="cst_tooltip">{{item.branches[0].branch_name}}...
+                        <span class="tooltiptext">
+                          <span *ngFor ="let b_item of item.branches; index as bi">
+                            <span *ngIf="bi!=0">, </span>{{ b_item.branch_name }}</span>
+                      </span>
+                    </div>
+                  </span>
+                </span>
+                
+                
+              </td> 
+              <td  (click)="presentActionSheet(item, i)"  >{{item.model_number}}</td>
+              <td  (click)="presentActionSheet(item, i)"  >
+                <span *ngIf="item.get_main_category">
+                  {{item.get_main_category.category_name}}
+                </span>
+              </td>
+              <td  (click)="presentActionSheet(item, i)"  >
+                <span *ngIf="item.get_category">
+                  {{item.get_category.category_name}}
+                </span>
+              </td>
+              <td  (click)="presentActionSheet(item, i)"  >
+              
+                <span *ngIf="item.get_sub_category">
+
+                  {{item.get_sub_category.category_name}}
+                </span>
+                <span *ngIf="!item.get_sub_category">
+
+                  N/A
+                </span>
+              
+              </td>
+              <td  (click)="presentActionSheet(item, i)"  >
+              <span *ngIf="item.brand_id">{{item.get_brand.brand_name}}</span>  
+              </td>
+
+              <td  (click)="presentActionSheet(item, i)"  >{{item.msrp}}</td>
+              <td  (click)="presentActionSheet(item, i)"  >{{item.cost}}</td>
+
+              <td  (click)="presentActionSheet(item, i)"  >{{item.refurb_cost}}</td>
+              <td  (click)="presentActionSheet(item, i)"  >{{item.total_cost}}</td>
+
+              <td>
+                <p style="color:blue;cursor: pointer;" (click)="presentModal(item)">Detail</p>
+              
+              </td>
+
+             
+            </tr>
+         
+         </tbody>
+      </table>
+      <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+        <ion-infinite-scroll-content
+          loadingSpinner="bubbles"
+          loadingText="Loading more data...">
+        </ion-infinite-scroll-content>
+      </ion-infinite-scroll>
+    </ion-col>
+  </ion-row>
+  	
+  
+  </div>
+</ion-grid>
+</ion-card-content>
+</ion-card>
+</ion-content>
